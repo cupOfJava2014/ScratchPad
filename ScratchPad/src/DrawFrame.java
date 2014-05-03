@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -27,6 +29,8 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 	
 	private Image dbi;
 	private Graphics dbg;
+	
+	Image imported = null;
 	
 	ArrayList<Rectangle> px = new ArrayList<Rectangle>();
 	ArrayList<Integer> colors = new ArrayList<Integer>();
@@ -51,6 +55,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 	
 	JButton newDoodle = new JButton("New");
 	JButton save = new JButton("Save");
+	JButton open = new JButton("Open...");
 	
 	JMenuBar menubar = new JMenuBar();
 	
@@ -65,7 +70,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		
 		canvas = new Rectangle(0, 75, getWidth(), getHeight() - 75);
 		
-		setTitle("ScratchPad _43");
+		setTitle("ScratchPad _50");
 		setLayout(new FlowLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -85,6 +90,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		color.addItem("Red");
 		color.addItem("Blue");
 		
+		add(open);
 		add(newDoodle);
 		add(save);
 		add(tool);
@@ -96,6 +102,30 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		
 		addMouseMotionListener(this);
 		
+		open.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				JFileChooser opener = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "Jpg Images", "jpg", "Portable Network Graphics","png");
+				    opener.setFileFilter(filter);
+				    int returnVal = opener.showOpenDialog(null);
+				    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				            File f = new File(opener.getSelectedFile().getAbsolutePath());
+				            try {
+								imported = ImageIO.read(f);
+							} catch (IOException e) {
+								System.out.println("Error while reading file " + f.getAbsolutePath() + "!");
+								e.printStackTrace();
+							}				            
+				    }	
+				
+			}
+						
+		});
+		
 		save.addActionListener(new ActionListener() {
 			
 			@Override
@@ -103,7 +133,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 				
 				JFileChooser saver = new JFileChooser();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				        "Jpeg Image", "jpg");
+				        "Jpg Images", "jpg");
 				    saver.setFileFilter(filter);
 				    int returnVal = saver.showSaveDialog(null);
 				    if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -133,6 +163,8 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 					px.clear();
 					colors.clear();
 					x_o.clear();
+					
+					imported = null;
 					
 				}
 				
@@ -200,6 +232,13 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		//g.fillRect(canvas.x, canvas.y, canvas.width, canvas.height);
 		
 		g.setColor(Color.BLACK);
+		
+		if (imported != null) {
+			
+			g.drawImage(imported, 0, 80, null);	
+			
+		}
+		
 		for (int i = 0; i < px.size(); i++) {
 			
 			if (colors.get(i) == 0) {
