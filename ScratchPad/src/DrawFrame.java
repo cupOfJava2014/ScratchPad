@@ -70,7 +70,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		
 		canvas = new Rectangle(0, 75, getWidth(), getHeight() - 75);
 		
-		setTitle("ScratchPad _50");
+		setTitle("ScratchPad _53");
 		setLayout(new FlowLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -106,22 +106,31 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
-				JFileChooser opener = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				        "Jpg Images", "jpg", "Portable Network Graphics","png");
-				    opener.setFileFilter(filter);
-				    int returnVal = opener.showOpenDialog(null);
-				    if(returnVal == JFileChooser.APPROVE_OPTION) {
-				            File f = new File(opener.getSelectedFile().getAbsolutePath());
-				            try {
-								imported = ImageIO.read(f);
-							} catch (IOException e) {
-								System.out.println("Error while reading file " + f.getAbsolutePath() + "!");
-								e.printStackTrace();
-							}				            
-				    }	
+					
+					if (JOptionPane.showConfirmDialog(null, "Are you sure? This will erase the items that you have!", "Open a new Picture?", JOptionPane.YES_NO_OPTION) == 0) {
 				
+						imported = null;
+						px.clear();
+						x_o.clear();
+						colors.clear();
+
+						JFileChooser opener = new JFileChooser();
+							FileNameExtensionFilter filter = new FileNameExtensionFilter(
+										"Jpg Images", "jpg", "Portable Network Graphics","png");
+								opener.setFileFilter(filter);
+								int returnVal = opener.showOpenDialog(null);
+								if(returnVal == JFileChooser.APPROVE_OPTION) {
+								File f = new File(opener.getSelectedFile().getAbsolutePath());
+								try {
+									imported = ImageIO.read(f);
+								} catch (IOException e) {
+									System.out.println("Error while reading file " + f.getAbsolutePath() + "!");
+									e.printStackTrace();
+								}				            
+								}	
+				
+					}
+				    
 			}
 						
 		});
