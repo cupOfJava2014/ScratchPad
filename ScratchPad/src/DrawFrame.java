@@ -39,10 +39,12 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 	//ArrayList<Integer> sizes = new ArrayList<Integer>();
 	
 	Rectangle canvas;
-	Rectangle mouse = new Rectangle(0, 0, 3, 3);
+	Rectangle mouse = new Rectangle(0, 0, px_size, px_size);
 	
 	int mx;
 	int my;
+
+        private int px_size = 3;
 	
 	@SuppressWarnings("rawtypes")
 	JComboBox tool = new JComboBox();
@@ -68,7 +70,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		
 		setSize(480, 480);
 
-                size.setText(3);
+                size.setText(px_size);
 		
 		canvas = new Rectangle(0, 75, getWidth(), getHeight() - 75);
 		
@@ -90,6 +92,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		
 		color.addItem("Black");
 		color.addItem("Red");
+                color.addItem("Green");
 		color.addItem("Blue");
 		
 		add(open);
@@ -118,7 +121,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 
 						JFileChooser opener = new JFileChooser();
 							FileNameExtensionFilter filter = new FileNameExtensionFilter(
-										"Jpg Images", "jpg", "Portable Network Graphics","png");
+										"Jpg Images", "jpg", "Portable Network Graphics","png","GIF Images","gif");
 								opener.setFileFilter(filter);
 								int returnVal = opener.showOpenDialog(null);
 								if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -261,7 +264,9 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 			} else if (colors.get(i) == 2) {
 				g.setColor(Color.BLUE);
 				g.fillRect(px.get(i).x, px.get(i).y, px.get(i).width, px.get(i).height);				
-			}
+			} else if (colors.get(i) == 3) {
+                                g.setColor(Color.GREEN);
+                                g.fillRect(px.get(i).x, px.get(i).y, px.get(i).width, px.get(i).height);
 			
 		}
 		
@@ -302,8 +307,10 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 		if (mouse.intersects(canvas)) {
 		
 			if (tool.getSelectedItem().equals("Pen")) {
+
+                                px_size = Integer.parseInt(size.getText());
 		
-				px.add(new Rectangle(x, y, Integer.parseInt(size.getText()), Integer.parseInt(size.getText())));
+				px.add(new Rectangle(x, y, px_size, px_size));
 			
 				if (color.getSelectedItem().equals("Black")) {
 				
@@ -322,6 +329,12 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 					colors.add(2);
 	
 				}
+
+                                if (colors.getSelectedItem.equals("Green")) {
+
+                                        colors.add(3);
+
+                                }
 		
 			}
 		
