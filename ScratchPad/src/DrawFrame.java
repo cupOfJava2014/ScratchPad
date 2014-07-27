@@ -51,7 +51,7 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 	//@SuppressWarnings("rawtypes")
 	//JComboBox toolset = new JComboBox();
 	
-	JTextField size = new JTextField("3");
+	JTextField size = new JTextField(1);
 	
 	JButton newDoodle = new JButton("New");
 	JButton save = new JButton("Save");
@@ -67,6 +67,8 @@ public class DrawFrame extends JFrame implements MouseMotionListener, Runnable {
 	public DrawFrame() {
 		
 		setSize(480, 480);
+
+                size.setText(3);
 		
 		canvas = new Rectangle(0, 75, getWidth(), getHeight() - 75);
 		
